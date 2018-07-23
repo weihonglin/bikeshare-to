@@ -1,14 +1,22 @@
+import argparse
+
 import scraper
 
 
 def save_data(dataset):
-    with open("./data/dataset.csv", "w") as csvfile:
-        dataset.to_csv(csvfile)
-    print("Cached.")
+    dataset.to_csv("./data/dataset.csv", mode="w")
+    print("Dataset saved.")
 
 
 def main():
-    dataset = scraper.scrape_time_series(0, 0, 21, 7, 2018)
+    parser = argparse.ArgumentParser()
+    parser.add_argument("hour", type=int)
+    parser.add_argument("min", type=int)
+    parser.add_argument("-d", type=int, default=None)
+    parser.add_argument("-m", type=int, default=None)
+    parser.add_argument("-y", type=int, default=None)
+    args = parser.parse_args()
+    dataset = scraper.scrape_time_series(args.hour, args.min, args.d, args.m, args.y)
     save_data(dataset)
 
 
